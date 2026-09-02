@@ -87,3 +87,90 @@ curl -X POST http://localhost:3000/users/register \
     "password": "secret123"
   }'
 ```
+
+## `POST /users/login`
+
+Authenticates an existing user and returns an authentication token when the email and password are valid.
+
+### Request
+
+**Content-Type:** `application/json`
+
+```json
+{
+  "email": "john.doe@example.com",
+  "password": "secret123"
+}
+```
+
+### Required Data
+
+| Field | Type | Required | Requirements |
+|---|---|---:|---|
+| `email` | string | Yes | Must be a valid email address. |
+| `password` | string | Yes | Must be at least 6 characters long. |
+
+### Successful Response
+
+**Status:** `200 OK`
+
+```json
+{
+  "token": "generated-jwt-token",
+  "user": {
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "john.doe@example.com"
+  }
+}
+```
+
+The password is checked against its stored hash and is not included in the response.
+
+### Error Responses
+
+#### `400 Bad Request`
+
+Returned when the email or password fails request validation. The response contains an array describing the validation errors:
+
+```json
+{
+  "errors": [
+    {
+      "type": "field",
+      "value": "invalid-email",
+      "msg": "Please provide a valid email",
+      "path": "email",
+      "location": "body"
+    }
+  ]
+}
+```
+
+Common validation messages include:
+
+- `Please provide a valid email`
+- `Password is required`
+
+#### `401 Unauthorized`
+
+Returned when no user exists for the email or the password does not match:
+
+```json
+{
+  "message": "Invalid email or password"
+}
+```
+
+### Example Request
+
+```bash
+curl -X POST http://localhost:3000/users/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "john.doe@example.com",
+    "password": "secret123"
+  }'
+```

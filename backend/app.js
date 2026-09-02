@@ -16,7 +16,5 @@ app.get('/', (req, res) => {
 app.use(express.json());
 app.use('/users', userRoutes);
 module.exports = app;
-// app.listen(3000, () => {
-//     console.log('Server is running http://localhost:3000');
-// });
+ 
 
