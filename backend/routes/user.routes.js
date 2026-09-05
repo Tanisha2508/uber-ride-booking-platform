@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const {body} = require('express-validator');
 const userController = require('../controllers/user.controller');
+const authMiddleware = require('../middleware/auth.middleware');
+
 
 router.post('/register', [
     //express sirf chck kr ra condition
@@ -13,6 +15,8 @@ router.post('/register', [
 
 router.post('/login',[body('email').isEmail().withMessage('Please provide a valid email'), body('password').isLength({min: 6}).withMessage('Password is required')] , 
 userController.loginUser);
+
+router.get('/profile', authMiddleware.authUser, userController.getUserProfile);
 
 
 module.exports = router;

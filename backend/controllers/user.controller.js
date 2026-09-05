@@ -44,3 +44,7 @@ module.exports.loginUser= async (req,res,next)=>{
     const token = user.generateAuthToken();
     res.status(200).json({token,user});
 }
+//middleware bnre bhi jo user user login aw uski profile dikhni chhahiye vrna error
+module.exports.getUserProfile = async (req,res,next)=>{
+    res.status(200).json({user:req.user});
+}
